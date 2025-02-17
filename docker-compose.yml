@@ -15,7 +15,9 @@ services:
     networks:
       - my_network
   app:
-    image: paulgiraldo/modulo3-backend03:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       MY_DATABASE_DRIVER: "mysql"
       DB_HOST: db
