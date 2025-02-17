@@ -49,7 +49,7 @@ pipeline {
                  ${env.BUILD_URL}
 
                  Saludos,
-                 Jenkins Server
+                 Jenkins Server ...
                  """
         }
     }
