@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sshagent(['do-droplet-ssh-key']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no root@104.248.48.92 "
+                        ssh -o StrictHostKeyChecking=no root@204.48.22.13 "
                         ls ~/codigo/paulgiraldo
                         "
                     '''
