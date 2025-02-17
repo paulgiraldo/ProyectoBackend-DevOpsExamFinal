@@ -22,7 +22,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
       
-      - name: Publicando imagen al dockerhub...
+      - name: Publicando imagen al dockerhub.....
         run: |
           docker push paulgiraldo/backend-mod3:latest
   
