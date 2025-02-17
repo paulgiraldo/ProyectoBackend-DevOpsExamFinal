@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Desplegar proyecto node a Digital ocean') {
+        stage('Desplegar proyecto node a Digital Ocean') {
             when {
                 branch 'jenkins'
             }
