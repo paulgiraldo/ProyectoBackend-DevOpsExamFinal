@@ -1,6 +1,7 @@
 pipeline {
     agent none
 
+    stages {
         stage('Testear conexion SHH con servidor digital Ocean') {
             when {
                 branch 'jenkins'
