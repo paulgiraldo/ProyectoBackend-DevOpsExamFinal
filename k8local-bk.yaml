@@ -94,7 +94,8 @@ spec:
             mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-storage-paul
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: mysql-pvc-paul
         - name: init-scripts
           configMap:
             name: mysql-script-inicial-paul
