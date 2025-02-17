@@ -6,7 +6,7 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: mysql-pvc-paul
   namespace: paulgiraldo-modulo3
 spec:
   resources:
@@ -30,7 +30,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-script-inicial
+  name: mysql-script-inicial-paul
   namespace: paulgiraldo-modulo3
 data:
   init.sql: |
@@ -59,7 +59,7 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql-deployment-paul
   namespace: paulgiraldo-modulo3
 spec:
   replicas: 1
@@ -72,7 +72,7 @@ spec:
         app: mysql
     spec:
       containers:
-      - name: mysql-container
+      - name: mysql-container-paul
         image: mysql:5.7
         envFrom:
         - configMapRef:
@@ -88,22 +88,22 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-          - name: mysql-storage
+          - name: mysql-storage-paul
             mountPath: /var/lib/mysql
           - name: init-scripts
             mountPath: /docker-entrypoint-initdb.d
       volumes:
-        - name: mysql-storage
+        - name: mysql-storage-paul
           persistentVolumeClaim:
-            claimName: mysql-pvc
+            claimName: mysql-pvc-paul
         - name: init-scripts
           configMap:
-            name: mysql-script-inicial
+            name: mysql-script-inicial-paul
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: mysql-service-paul
   namespace: paulgiraldo-modulo3
 spec:
   selector:
@@ -116,7 +116,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: backend-deployment-paul
   namespace: paulgiraldo-modulo3
 spec:
   replicas: 2
@@ -129,8 +129,8 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend-container
-        image: paulgiraldo/modulo3-backend:latest
+      - name: backend-container-paul
+        image: paulgiraldo/backend-mod3:latest
         envFrom:
         - configMapRef:
             name: paulgiraldo-configmap       
@@ -146,7 +146,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: backend-service-paul
   namespace: paulgiraldo-modulo3
 spec:
   type: LoadBalancer
