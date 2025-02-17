@@ -1,41 +1,41 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: paulgiraldo-modulo3
+  name: pablo-giraldo
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc-paul
-  namespace: paulgiraldo-modulo3
+  name: mysql-pvc
+  namespace: pablo-giraldo
 spec:
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: paulgiraldo-configmap
-  namespace: paulgiraldo-modulo3
+  name: pablogiraldo-configmap
+  namespace: pablo-giraldo
 data:
   MY_DATABASE_DRIVER: "mysql"
-  DB_HOST: mysql-service-paul
-  DB_USER_NAME: pauldb
-  DB_NAME: usuarios_db
+  DB_HOST: mysql-service  # Cambiado a mysql-service
+  DB_USER_NAME: pablo
+  DB_NAME: database
   DB_PORT: "3306"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-script-inicial-paul
-  namespace: paulgiraldo-modulo3
+  name: mysql-script-inicial
+  namespace: pablo-giraldo
 data:
   init.sql: |
-    CREATE DATABASE IF NOT EXISTS usuarios_db;
-    USE usuarios_db;
+    CREATE DATABASE IF NOT EXISTS database;
+    USE database;
     CREATE TABLE IF NOT EXISTS usuarios (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nombre VARCHAR(50),
@@ -43,26 +43,23 @@ data:
         edad INT,
         sexo CHAR(1)
     );
-
     INSERT INTO usuarios (nombre, apellido, edad, sexo) VALUES ('Maria', 'Rojas', 30, 'F');
-    CREATE USER 'pauldb'@'%' IDENTIFIED BY 'rootpwd';
-    GRANT ALL PRIVILEGES ON *.* TO 'pauldb'@'%' WITH GRANT OPTION;
-    FLUSH PRIVILEGES;
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: paulgiraldo-secret
-  namespace: paulgiraldo-modulo3
+  name: pablo-secret
+  namespace: pablo-giraldo
 type: Opaque
 data:
-  DB_PASSWORD: cm9vdHB3ZA==
+  DB_PASSWORD: cm9vdHB3ZA==  # "rootpwd" en base64
+  ROOT_PASSWORD: cm9vdHB3ZA==  # "rootpwd" en base64
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment-paul
-  namespace: paulgiraldo-modulo3
+  name: mysql-deployment
+  namespace: pablo-giraldo
 spec:
   replicas: 1
   selector:
@@ -74,38 +71,45 @@ spec:
         app: mysql
     spec:
       containers:
-      - name: mysql-container-paul
+      - name: mysql-container
         image: mysql:5.7
         envFrom:
-        - configMapRef:
-            name: paulgiraldo-configmap       
+          - configMapRef:
+              name: pablogiraldo-configmap
+          - secretRef:
+              name: pablo-secret
         env:
           - name: MYSQL_ROOT_PASSWORD
-            valueFrom: 
+            valueFrom:
               secretKeyRef:
-                name: paulgiraldo-secret
-                key: DB_PASSWORD
+                name: pablo-secret
+                key: ROOT_PASSWORD
           - name: MYSQL_DATABASE
-            value: usuarios_db
+            valueFrom:
+              configMapKeyRef:
+                name: pablogiraldo-configmap
+                key: DB_NAME
         ports:
         - containerPort: 3306
         volumeMounts:
-          - name: mysql-storage-paul
+          - name: mysql-storage
             mountPath: /var/lib/mysql
           - name: init-scripts
             mountPath: /docker-entrypoint-initdb.d
+            readOnly: true
       volumes:
-        - name: mysql-storage-paul
-          emptyDir: {}
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
         - name: init-scripts
           configMap:
-            name: mysql-script-inicial-paul
+            name: mysql-script-inicial
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service-paul
-  namespace: paulgiraldo-modulo3
+  name: mysql-service
+  namespace: pablo-giraldo
 spec:
   selector:
     app: mysql
@@ -117,10 +121,9 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment-paul
-  namespace: paulgiraldo-modulo3
+  name: backend-deployment
+  namespace: pablo-giraldo
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: backend
@@ -130,27 +133,23 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend-container-paul
-        image: paulgiraldo/backend-mod3:latest
+      - name: backend-container
+        image: paulgiraldo/backend-mod3:latest       # ppablo1999/proyecto_final_pablo:latest
         envFrom:
         - configMapRef:
-            name: paulgiraldo-configmap       
-        env:
-          - name: DB_PASSWORD
-            valueFrom: 
-              secretKeyRef:
-                name: paulgiraldo-secret
-                key: DB_PASSWORD
+            name: pablogiraldo-configmap
+        - secretRef:
+            name: pablo-secret
         ports:
         - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service-paul
-  namespace: paulgiraldo-modulo3
+  name: backend-service
+  namespace: pablo-giraldo
 spec:
-  type: LoadBalancer      # NodePort => Local;  ClusterIP = Local;  LoadBalancer => Nube
+  type: LoadBalancer
   selector:
     app: backend
   ports:
