@@ -45,6 +45,7 @@ data:
     );
 
     INSERT INTO usuarios (nombre, apellido, edad, sexo) VALUES ('Maria', 'Rojas', 30, 'F');
+    INSERT INTO usuarios (nombre, apellido, edad, sexo) VALUES ('Juan', 'Rojas', 35, 'M');
     CREATE USER 'pauldb'@'%' IDENTIFIED BY 'rootpwd';
     GRANT ALL PRIVILEGES ON *.* TO 'pauldb'@'%' WITH GRANT OPTION;
     FLUSH PRIVILEGES;
