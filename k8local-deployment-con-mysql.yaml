@@ -74,6 +74,9 @@ spec:
       containers:
       - name: mysql-container
         image: mysql:5.7
+        envFrom:
+        - configMapRef:
+            name: paulgiraldo-configmap       
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom: 
@@ -146,10 +149,10 @@ metadata:
   name: backend-service
   namespace: paulgiraldo-modulo3
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: backend
   ports:
-  - port: 8081
+  - port: 8089
     protocol: TCP
     targetPort: 3000
