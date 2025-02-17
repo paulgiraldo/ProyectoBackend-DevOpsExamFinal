@@ -25,11 +25,7 @@ pipeline {
                 sshagent(['do-droplet-ssh-key']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no root@104.248.48.92 "
-                        cd ~/codigo/paulgiraldo/app/ &&
-                        rm -rf * &&
-                        git clone -b jenkins https://github.com/paulgiraldo/ProyectoBackend-DevOpsExamFinal.git &&
-                        cd ProyectoBackend-DevOpsExamFinal &&
-                        docker compose up -d
+                        ls ~/codigo/paulgiraldo
                         "
                     '''
                 }
