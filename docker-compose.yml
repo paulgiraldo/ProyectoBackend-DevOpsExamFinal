@@ -40,7 +40,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASS=rootpwd
       - MYSQL_DB=usuariosdb
-      - CRON_TIME=*/1 * * * *
+      - CRON_TIME= 0 * * * *
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - TIMEOUT=10s
