@@ -29,7 +29,7 @@ pipeline {
                         rm -rf * &&
                         git clone -b jenkins https://github.com/paulgiraldo/ProyectoBackend-DevOpsExamFinal.git &&
                         cd ProyectoBackend-DevOpsExamFinal &&
-                        docker compose up -ddoc
+                        docker compose up -d
                         "
                     '''
                 }
