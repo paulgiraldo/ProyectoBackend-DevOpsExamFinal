@@ -6,12 +6,12 @@ services:
     container_name: db_mysql_paul
     environment:
       MYSQL_ROOT_PASSWORD: rootpwd
-      MYSQL_DATABASE: usuarios
+      MYSQL_DATABASE: usuariosdb
     volumes:
       - db_data:/var/lib/mysql
       - ./data/mysql_data.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 3306:3306
+      - 3398:3306
     networks:
       - my_network
   app:
@@ -23,8 +23,8 @@ services:
       DB_HOST: db_mysql_paul
       DB_USER_NAME: root
       DB_PASSWORD: rootpwd
-      DB_NAME: usuarios
-      DB_PORT: 3306
+      DB_NAME: usuariosdb
+      DB_PORT: 3398
     depends_on:
       - db
     ports:
