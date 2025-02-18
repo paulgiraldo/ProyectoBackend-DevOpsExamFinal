@@ -27,27 +27,7 @@ services:
       - 8098:3000
     restart: always
     networks:
-      - paul_my_network      
-  dbBackup:
-    image: fradelg/mysql-cron-backup
-    container_name: paul_dbBackup
-    depends_on:
-      - db
-    restart: always
-    volumes:
-      - ./backup:/backup
-    environment:
-      - MYSQL_USER=root
-      - MYSQL_PASS=rootpwd
-      - MYSQL_DB=usuariosdb
-      - CRON_TIME=*/1 * * * *
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - TIMEOUT=10s
-      - INIT_BACKUP=1      
-    networks:
       - paul_my_network
-
 volumes:
   paul_db_data:
 
