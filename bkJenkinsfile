@@ -26,8 +26,9 @@ pipeline {
                     sh '''
                         ssh -o StrictHostKeyChecking=no root@204.48.22.13 "
                         cd ~/codigo/paulgiraldo/app/ &&
-                        rm -rf ~/codigo/paulgiraldo/app/docker-compose.yml &&
-                        cp docker-compose.yml ~/codigo/paulgiraldo/app/docker-compose.yml &&
+                        rm -rf * &&
+                        git clone -b jenkins https://github.com/paulgiraldo/ProyectoBackend-DevOpsExamFinal.git &&
+                        cd ProyectoBackend-DevOpsExamFinal &&
                         docker compose up -d
                         "
                     '''
